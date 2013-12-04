@@ -6,8 +6,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
-
 import org.scorelab.sense.util.SenseLog;
 
 public class Sense extends Service {

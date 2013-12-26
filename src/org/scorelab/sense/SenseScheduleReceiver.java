@@ -21,7 +21,7 @@ public class SenseScheduleReceiver extends BroadcastReceiver {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.SECOND, 30);
 		service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-				cal.getTimeInMillis(), 6 * 1000, pending);
+				cal.getTimeInMillis(), 20 * 1000, pending);
 	}
 
 }

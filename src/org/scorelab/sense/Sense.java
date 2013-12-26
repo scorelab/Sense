@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 
+import org.scorelab.sense.dataCollector.ProcessMemoryDataReader;
 import org.scorelab.sense.dataCollector.SensorDataReader;
 import org.scorelab.sense.util.SenseLog;
 
@@ -27,9 +28,20 @@ public class Sense extends Service {
 		SenseLog.i("Time: "
 				+ Calendar.getInstance().getTimeInMillis() + "");
 		
+		
+		
 		SensorDataReader ms=new SensorDataReader(this);
-		Thread dataCollector =new Thread(ms);
-		dataCollector.start();
+		Thread sensorDataCollector =new Thread(ms);
+		sensorDataCollector.start();
+		
+		ProcessMemoryDataReader psdr=new ProcessMemoryDataReader(this);
+		Thread activityDataCollector =new Thread(psdr);
+		activityDataCollector.start();
+		
+		
+		
+		
+		
 		//ms.getSensorData();
 		SenseLog.i("End Sense");
 		return Service.START_NOT_STICKY;

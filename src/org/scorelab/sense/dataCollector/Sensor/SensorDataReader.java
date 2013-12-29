@@ -1,9 +1,16 @@
-package org.scorelab.sense.dataCollector;
+package org.scorelab.sense.dataCollector.Sensor;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+import java.util.concurrent.TimeUnit;
+
+
+import org.scorelab.sense.dataCollector.DataReader;
 import org.scorelab.sense.util.SenseLog;
+import org.scorelab.sense.writer.DBWriter;
+
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -14,16 +21,17 @@ import android.hardware.SensorManager;
 
 
 
-public class SensorDataReader implements SensorEventListener ,Runnable{
+public class SensorDataReader extends DataReader implements SensorEventListener {
 	private SensorManager mSensorManager;
 	private List<Sensor> mSensors;
 	private Map<String, SensorData> senseDataStruct = new HashMap<String, SensorData>();
+	private Vector<SensorData> sensorVector = new Vector<SensorData>();
+	Context ctx;
+	
 	
 	
 	public SensorDataReader(Context ctx) {
-		
-		
-		
+		this.ctx=ctx;
 		mSensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
 		mSensors= mSensorManager.getSensorList(Sensor.TYPE_ALL);
 		
@@ -37,9 +45,7 @@ public class SensorDataReader implements SensorEventListener ,Runnable{
 		
 	}
 	
-	public void getSensorData(){
-		
-		
+	private void collectSensorData(){
 		SenseLog.i("Sensor Type");
 		for (Sensor sensor : mSensors)
 		{
@@ -47,26 +53,46 @@ public class SensorDataReader implements SensorEventListener ,Runnable{
 			
 			
 			if (senseDataStruct.containsKey(sensor.getName())){ 
-				String Values="";
+				
 				SensorData sensorInfo=senseDataStruct.get(sensor.getName());
+				
+				sensorVector.add(sensorInfo);
+				
+				//DEBUG
+				String Values="";
 				for(int i=0;i<sensorInfo.sensorValues.length;i++){
 					Values+=sensorInfo.sensorValues[i]+" , ";
 					
 				}
-			
-			//SenseLog.d("Sensor Name "+sensor.getName()+", Type "+ sensor.getType() + " , sensorValue :" + Values);
-				SenseLog.d("Sensor Name "+sensor.getName()+", Type "+ sensor.getType());
-				SenseLog.d(sensor.getType() + " , sensorValue :" + Values);
+				SenseLog.d("Sensor Name "+sensor.getName()+", Type "+ sensor.getType() + " , sensorValue :" + Values);
+				//SenseLog.d("Sensor Name "+sensor.getName()+", Type "+ sensor.getType());
+				//SenseLog.d(sensor.getType() + " , sensorValue :" + Values);    	
+				  
 			}
 			}catch(Throwable e){
 				
 				
-				SenseLog.d("Sensor Name "+sensor.getName()+", Type "+ sensor.getType());
+				SenseLog.d("error on sensors");
 				
 			}
 				
 		}
 		mSensorManager.unregisterListener(this);
+		
+		
+	}
+	
+	public Vector<SensorData> getSensorData(){
+		try {
+			TimeUnit.MILLISECONDS.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		collectSensorData();
+		return sensorVector;
+		
+		
 		
 		
 	}
@@ -92,8 +118,9 @@ public class SensorDataReader implements SensorEventListener ,Runnable{
 
 	@Override
 	public void run() {
-		//Thread.sleep(10);
-		getSensorData();
+		DBWriter dbW=new DBWriter(ctx);
+		dbW.insertSensor(getSensorData());
+		
 		
 	}
 	

@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 
-import org.scorelab.sense.dataCollector.ProcessMemoryDataReader;
-import org.scorelab.sense.dataCollector.SensorDataReader;
+
+import org.scorelab.sense.dataHandler.Collector;
 import org.scorelab.sense.util.SenseLog;
 
 public class Sense extends Service {
@@ -30,17 +30,11 @@ public class Sense extends Service {
 		
 		
 		
-		SensorDataReader ms=new SensorDataReader(this);
-		Thread sensorDataCollector =new Thread(ms);
-		sensorDataCollector.start();
-		
-		ProcessMemoryDataReader psdr=new ProcessMemoryDataReader(this);
-		Thread activityDataCollector =new Thread(psdr);
-		activityDataCollector.start();
 		
 		
-		
-		
+		//Collector Sensor=new Collector(this,Collector.DataType.SENSOR);
+		Collector App=new Collector(this,Collector.DataType.APP);
+		//Collector Wifi=new Collector(this,Collector.DataType.WIFI);
 		
 		//ms.getSensorData();
 		SenseLog.i("End Sense");

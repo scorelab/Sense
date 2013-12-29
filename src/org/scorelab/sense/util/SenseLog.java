@@ -11,6 +11,9 @@ public class SenseLog {
 	private static final String SENSE_WARN_LOG_TAG = "WARN";
 
 	public static void d(String msg) {
+		
+		
+		
 		Log.d(SENSE_DEBUG_LOG_TAG, msg);
 	}
 

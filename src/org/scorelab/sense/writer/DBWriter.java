@@ -1,5 +1,9 @@
 package org.scorelab.sense.writer;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Vector;
 
 import org.scorelab.sense.dataCollector.Process.ProcessData;
@@ -10,6 +14,8 @@ import org.scorelab.sense.util.SenseLog;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -18,54 +24,65 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBWriter extends SQLiteOpenHelper{
 	
 	private static final String DB_NAME = "sense.db";
-	  private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 1;
+	  
+	Context context;
 	public DBWriter(Context context) {
 	    super(context,  DB_NAME,null, DATABASE_VERSION);
+	    this.context=context;
 	  }
 	
 	
+   
 	
-	 private static final String DATABASE_CREATE = "CREATE TABLE 'process' ("+
-			"  'Id' int(11) NOT NULL default '0',"+
-			"  'Name' text,"+
-			"  'PrivateDirtyData' int(11) default NULL,"+
-			"  'TotalPss' int(11) default NULL,"+
-			"  'totalSharedDirty' int(11) default NULL,"+
-			"  'timestamp' timestamp NOT NULL default '0000-00-00 00:00:00',"+
-			"  PRIMARY KEY  ('timestamp','Id')"+
-			") ;"+
-			"CREATE TABLE 'sensor' ("+
-			"  'Name' varchar(255) NOT NULL default '',"+
-			"  'Vendor' text,"+
-			"  'accuracy' int(11) default NULL,"+
-			"  'values' text,"+
-			"  'collectTime' timestamp NOT NULL default '0000-00-00 00:00:00',"+
-			"  'timestamp' timestamp NULL default NULL,"+
-			"  PRIMARY KEY  ('collectTime','Name')"+
-			");"+
-			"CREATE TABLE 'service' ("+
-			"  'Id' int(11) NOT NULL default '0',"+
-			"  'Name' text,"+
-			"  'ClassName' varchar(800) NOT NULL default '',"+
-			"  'timestamp' timestamp NOT NULL default '0000-00-00 00:00:00' ,"+
-			"  PRIMARY KEY  ('timestamp','ClassName','Id')"+
-			") ;"+
-			"CREATE TABLE 'wifi' ("+
-			"  'SSID' varchar(512) NOT NULL default '',"+
-			"  'BSSID' text,"+
-			"  'Capabilities' text,"+
-			"  'TimeStamp' timestamp NOT NULL default '0000-00-00 00:00:00',"+
-			"  PRIMARY KEY  ('TimeStamp','SSID')"+
-			") ;";
+    
+    
+    private static final String DATABASE_CREATE ="";
+
+	 
+	 
+	 
+    
+    private void executeSQLScript(SQLiteDatabase database, String dbname) {
+    	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    	    byte buf[] = new byte[1024*3];
+    	    int len;
+    	    AssetManager assetManager = context.getAssets();
+    	    InputStream inputStream = null;
+    	         
+    	    try{
+    	        inputStream = assetManager.open(dbname);
+    	        while ((len = inputStream.read(buf)) != -1) {
+    	            outputStream.write(buf, 0, len);
+    	        }
+    	        outputStream.close();
+    	        inputStream.close();
+    	             
+    	        String[] createScript = outputStream.toString().split(";");
+    	        for (int i = 0; i < createScript.length; i++) {
+    	                String sqlStatement = createScript[i].trim();
+    	            // TODO You may want to parse out comments here
+    	            if (sqlStatement.length() > 0) {
+    	                    database.execSQL(sqlStatement + ";");
+    	                }
+    	        }
+    	    } catch (IOException e){
+    	        
+    	    } catch (SQLException e) {
+    	       SenseLog.i(e.getMessage());
+    	    }
+    	}
 	@Override
 	public void onCreate(SQLiteDatabase database) {
-		database.execSQL(DATABASE_CREATE);
+		
+		executeSQLScript(database, "db.sql");
 		SenseLog.i("database created");
+		
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int version_old, int current_version) {
-		String query;
+		/*String query;
         query = "DROP TABLE IF EXISTS sensor";
         database.execSQL(query);
         
@@ -75,7 +92,7 @@ public class DBWriter extends SQLiteOpenHelper{
         query = "DROP TABLE IF EXISTS service";
         database.execSQL(query);
         query = "DROP TABLE IF EXISTS wifi";
-        database.execSQL(query);
+        database.execSQL(query);*/
         
         onCreate(database);
 		
@@ -101,7 +118,7 @@ public class DBWriter extends SQLiteOpenHelper{
 			
 		}
         values.put("accuracy", sensorInfo.accuracyStatus);
-        values.put("values", Values);
+        values.put("Sensorvalues", Values);
         values.put("CollectTime", sensorInfo.collectTimestamp);
         values.put("timestamp", sensorInfo.timestamp);
         database.insert("sensor", null, values);

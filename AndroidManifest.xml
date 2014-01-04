@@ -10,12 +10,22 @@
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
+	<uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        
+			<activity android:name="org.scorelab.sense.SenseActivity"
+				android:theme="@android:style/Theme.Translucent.NoTitleBar"
+				android:label="@string/app_name">
+				<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+				</intent-filter>
+			</activity>
         <service
             android:name="org.scorelab.sense.Sense"
             android:enabled="true"
@@ -26,11 +36,14 @@
         <receiver android:name="org.scorelab.sense.SenseScheduleReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.HOME" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                  
+                
             </intent-filter>
         </receiver>
-        <receiver android:name="StartSenseScheduleReceiver" >
-        </receiver>
+        
+        
     </application>
 
 </manifest>

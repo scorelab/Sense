@@ -12,16 +12,14 @@ public class SenseScheduleReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		AlarmManager service = (AlarmManager) context
-				.getSystemService(Context.ALARM_SERVICE);
-		Intent i = new Intent(context, StartSenseScheduleReceiver.class);
-		PendingIntent pending = PendingIntent.getBroadcast(context, 0, i,
-				PendingIntent.FLAG_CANCEL_CURRENT);
+		AlarmManager service = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		Intent i = new Intent(context, Sense.class);
+		PendingIntent pending = PendingIntent.getService(context, 0, i,0);
 
 		Calendar cal = Calendar.getInstance();
+		
 		cal.add(Calendar.SECOND, 30);
-		service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-				cal.getTimeInMillis(), 20 * 1000, pending);
+		service.setRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(), 20 * 1000, pending);
 	}
 
 }

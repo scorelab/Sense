@@ -46,7 +46,7 @@ public class Sense extends Service {
 		query+=db.createTableFromClass("org.scorelab.sense.dataCollector.Wifi.WifiData")+" \n";
 		SenseLog.i(query);*/
 		
-		//Collector Sensor=new Collector(this,Collector.DataType.SENSOR);
+		Collector Sensor=new Collector(this,Collector.DataType.SENSOR);
 		Collector App=new Collector(this,Collector.DataType.APP);
 		//Collector Wifi=new Collector(this,Collector.DataType.WIFI);
 		

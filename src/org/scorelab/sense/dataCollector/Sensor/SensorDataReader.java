@@ -59,12 +59,8 @@ public class SensorDataReader extends DataReader implements SensorEventListener 
 				sensorVector.add(sensorInfo);
 				
 				//DEBUG
-				String Values="";
-				for(int i=0;i<sensorInfo.sensorValues.length;i++){
-					Values+=sensorInfo.sensorValues[i]+" , ";
-					
-				}
-				SenseLog.d("Sensor Name "+sensor.getName()+", Type "+ sensor.getType() + " , sensorValue :" + Values);
+				
+				SenseLog.d("Sensor Name "+sensor.getName()+", Type "+ sensor.getType() + " , sensorValue :" + sensorInfo.sensorValues);
 				//SenseLog.d("Sensor Name "+sensor.getName()+", Type "+ sensor.getType());
 				//SenseLog.d(sensor.getType() + " , sensorValue :" + Values);    	
 				  

@@ -21,5 +21,7 @@ public class ServiceData {
 		serviceClassName=runningService.service.getClassName();
 		timestamp=""+Calendar.getInstance().getTimeInMillis();
 	}
+	
+	
 
 }

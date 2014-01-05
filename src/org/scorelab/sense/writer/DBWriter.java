@@ -1,6 +1,5 @@
 package org.scorelab.sense.writer;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -106,7 +105,7 @@ public class DBWriter extends SQLiteOpenHelper{
 			Class<?> clazz = Class.forName(className);
 			fields = clazz.getDeclaredFields();
 			String name = clazz.getSimpleName().replace("Data", "");
-                        queryBuilder.append("DROP TABLE IF EXISTS "+name+";\n");
+                     
 			queryBuilder.append("CREATE TABLE " + name + " (");
 		} catch (Exception e) {
 			
@@ -184,17 +183,14 @@ public class DBWriter extends SQLiteOpenHelper{
         for(int i=0; i <queryValues.size(); i++){
         	SensorData sensorInfo=queryValues.get(i);
         ContentValues values = new ContentValues();
-        values.put("Name", sensorInfo.sensorName);
-        values.put("Vendor", sensorInfo.sensorVendor);
+        values.put("sensorName", sensorInfo.sensorName);
+        values.put("sensorVendor", sensorInfo.sensorVendor);
         
         String Values="";
-		for(int m=0;m<sensorInfo.sensorValues.length;m++){
-			Values+=sensorInfo.sensorValues[m]+" , ";
-			
-		}
-        values.put("accuracy", sensorInfo.accuracyStatus);
-        values.put("Sensorvalues", Values);
-        values.put("CollectTime", sensorInfo.collectTimestamp);
+		
+        values.put("accuracyStatus", sensorInfo.accuracyStatus);
+        values.put("sensorvalues", sensorInfo.sensorValues);
+        values.put("collectTimestamp", sensorInfo.collectTimestamp);
         values.put("timestamp", sensorInfo.timestamp);
         database.insert("sensor", null, values);
         }
@@ -209,10 +205,10 @@ public class DBWriter extends SQLiteOpenHelper{
         for(int i=0; i <queryValues.size(); i++){
         	ProcessData procInfo=queryValues.get(i);
 	        ContentValues values = new ContentValues();
-	        values.put("Id", procInfo.processId);
-	        values.put("Name", procInfo.processName);
-	        values.put("PrivateDirtyData", procInfo.totalPrivateDirty);
-	        values.put("TotalPss", procInfo.totalPss);
+	        values.put("processId", procInfo.processId);
+	        values.put("processName", procInfo.processName);
+	        values.put("totalPrivateDirty", procInfo.totalPrivateDirty);
+	        values.put("totalPss", procInfo.totalPss);
 	        values.put("totalSharedDirty", procInfo.totalSharedDirty);
 	        values.put("timestamp", procInfo.timestamp);
 	        database.insert("Process", null, values);
@@ -229,9 +225,9 @@ public class DBWriter extends SQLiteOpenHelper{
         for(int i=0; i <queryValues.size(); i++){
         	ServiceData serviceInfo=queryValues.get(i);
 	        ContentValues values = new ContentValues();
-	        values.put("Id", serviceInfo.processId);
-	        values.put("Name",serviceInfo.processName);
-	        values.put("ClassName", serviceInfo.serviceClassName);
+	        values.put("processId", serviceInfo.processId);
+	        values.put("processName",serviceInfo.processName);
+	        values.put("serviceClassName", serviceInfo.serviceClassName);
 	        values.put("timestamp", serviceInfo.timestamp);
 	        database.insert("service", null, values);
         }
@@ -249,17 +245,18 @@ public class DBWriter extends SQLiteOpenHelper{
 	        ContentValues values = new ContentValues();
 	        values.put("SSID", wifiInfo.SSID);
 	        values.put("BSSID", wifiInfo.BSSID);
-	        values.put("Capabilities", wifiInfo.Capability);
-	        values.put("timestamp", wifiInfo.TimeStamp);
+	        values.put("Capability", wifiInfo.Capability);
+	        values.put("Timestamp", wifiInfo.TimeStamp);
 	        database.insert("wifi", null, values);
+	        
+	        
         }
         
         SenseLog.i("wifi data inserted");
         database.close();
 		
 	}
-	
-	
+
 	
 	
 

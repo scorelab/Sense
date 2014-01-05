@@ -118,8 +118,11 @@ public class SensorDataReader extends DataReader implements SensorEventListener 
 
 	@Override
 	public void run() {
+		SenseLog.d("running -sensor");
+		Vector<SensorData> v=getSensorData();
 		DBWriter dbW=new DBWriter(ctx);
-		dbW.insertSensor(getSensorData());
+		SenseLog.d("db -sensor");
+		dbW.insertSensor(v);
 		
 		
 	}

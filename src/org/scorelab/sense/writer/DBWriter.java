@@ -1,20 +1,14 @@
 package org.scorelab.sense.writer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+
 import java.util.Vector;
 
-import org.scorelab.sense.dataCollector.Process.ProcessData;
-import org.scorelab.sense.dataCollector.Process.ServiceData;
-import org.scorelab.sense.dataCollector.Sensor.SensorData;
-import org.scorelab.sense.dataCollector.Wifi.WifiData;
+
+import org.scorelab.sense.Sense;
 import org.scorelab.sense.util.SenseLog;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -26,17 +20,17 @@ public class DBWriter extends SQLiteOpenHelper{
 	
 	private static final String DB_NAME = "senseData.db";
 	private static final int DATABASE_VERSION = 1;
-	
+	private SQLiteDatabase senseDb;
 	  
 	Context context;
-	public DBWriter(Context context) {
-	    super(context,  DB_NAME,null, DATABASE_VERSION);
-	    this.context=context;
-	    this.getWritableDatabase();
+	public DBWriter() {
+	    super(Sense.context,  DB_NAME,null, DATABASE_VERSION);
+	    this.context=Sense.context;
+	    senseDb = this.getWritableDatabase();
 	  }
 	
 
-    
+    /*
     private void executeSQLScript(SQLiteDatabase database, String dbname) {
     	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     	    byte buf[] = new byte[1024*3];
@@ -66,6 +60,8 @@ public class DBWriter extends SQLiteOpenHelper{
     	       SenseLog.i(e.getMessage());
     	    }
     	}
+    	
+    	*/
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		
@@ -171,7 +167,7 @@ public class DBWriter extends SQLiteOpenHelper{
 		
 	}
 	
-	
+	/*
 	public void insertSensor(Vector<SensorData> queryValues) {
 		
 		if(queryValues.size()<=0) return;
@@ -185,9 +181,6 @@ public class DBWriter extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put("sensorName", sensorInfo.sensorName);
         values.put("sensorVendor", sensorInfo.sensorVendor);
-        
-        String Values="";
-		
         values.put("accuracyStatus", sensorInfo.accuracyStatus);
         values.put("sensorvalues", sensorInfo.sensorValues);
         values.put("collectTimestamp", sensorInfo.collectTimestamp);
@@ -254,6 +247,60 @@ public class DBWriter extends SQLiteOpenHelper{
         
         SenseLog.i("wifi data inserted");
         database.close();
+		
+	}*/
+	
+	
+public void close(){
+	senseDb.close();
+	
+}
+	
+public void insertData(Vector queryValues){
+		
+		if(queryValues.size()<=0) {
+			
+			return;
+		}
+		
+		
+		//SenseLog.i(" testing "+ queryValues.get(0).getClass().getSimpleName());
+		Class<?> cls=queryValues.get(0).getClass();
+		String className=queryValues.get(0).getClass().getSimpleName().replace("Data", "");
+		
+    	Field[] fields = cls.getDeclaredFields();
+        for(int i=0; i <queryValues.size(); i++){
+        	
+        	ContentValues values = new ContentValues();
+        	for(int j=0; j < fields.length ; j++){
+        		Field field=fields[j];
+        		field.setAccessible(true);
+        		
+        		
+        		try {
+					if (String.class.isAssignableFrom(field.getType())) {					
+			        		values.put(fields[j].getName(),field.get(queryValues.get(i)).toString());
+					}else if (field.getType() == Integer.TYPE) {
+		        		values.put(fields[j].getName(),field.getInt(queryValues.get(i)));
+					}else if ((field.getType() == Float.TYPE )||( field.getType() == Double.TYPE)) {
+		        		values.put(fields[j].getName(),field.getDouble(queryValues.get(i)));
+					}
+				
+        		} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+        		
+        		
+        	}
+	        
+        	senseDb.insert(className, null, values);
+	        
+	        
+        }
+        SenseLog.i(className+" data inserted");
+        
 		
 	}
 

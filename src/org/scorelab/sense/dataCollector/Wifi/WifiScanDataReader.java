@@ -3,12 +3,15 @@ package org.scorelab.sense.dataCollector.Wifi;
 import java.util.List;
 import java.util.Vector;
 
+import org.scorelab.sense.Sense;
 import org.scorelab.sense.dataCollector.DataReader;
 import org.scorelab.sense.util.SenseLog;
 import org.scorelab.sense.writer.DBWriter;
 
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 
@@ -17,23 +20,34 @@ public class WifiScanDataReader extends DataReader{
 	private boolean wifiState=false;
 	private Vector<WifiData> wifiInfo=new Vector<WifiData>();
 	Context ctx;
-	public WifiScanDataReader(Context context) {
+	public WifiScanDataReader() {
 		
-		ctx=context;
-		wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-		
-		wifiState=wifiManager.isWifiEnabled();
-		
-		if(wifiState){
+		Context context=Sense.context;
+		ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+		if (mWifi.isAvailable()) {
 			
-			wifiManager.startScan();
+			wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 			
+			wifiState=wifiManager.isWifiEnabled();
 			
+			if(wifiState){
+				
+				wifiManager.startScan();
+				
+				
+			}else{
+				SenseLog.d("WifiNotEnable");
+				
+				
+			}
 		}else{
 			SenseLog.d("WifiNotAvailable");
 			
 			
 		}
+		
 		
 		
 	}
@@ -43,6 +57,8 @@ public class WifiScanDataReader extends DataReader{
 		if(!wifiState){
 			return;
 		}
+		
+		
 		
 		
 		List<ScanResult> wifiList = wifiManager.getScanResults();
@@ -69,8 +85,9 @@ public Vector<WifiData> getWifiData(){
 @Override
 public void run() {
 	
-	DBWriter dbW=new DBWriter(ctx);
-	dbW.insertWifi(getWifiData());
+	DBWriter dbW=new DBWriter();
+	dbW.insertData(getWifiData());
+	dbW.close();
 	
 	
 }

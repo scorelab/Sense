@@ -3,6 +3,7 @@ package org.scorelab.sense;
 import java.util.Calendar;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 
 import android.os.IBinder;
@@ -17,7 +18,7 @@ import org.scorelab.sense.writer.DBWriter;
 public class Sense extends Service {
 
 	//private final IBinder senseBinder = new SenseBinder();
-	
+	public static Context context;
 	@Override
     public void onCreate() {
         super.onCreate();
@@ -35,16 +36,10 @@ public class Sense extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		context=this;
 		SenseLog.i("Start Sense");
 		SenseLog.i("Time: "+ Calendar.getInstance().getTimeInMillis() + "");
-		SenseLog.i("Db");
-		/*DBWriter db=new DBWriter(this);
-		String query="";
-		query+=db.createTableFromClass("org.scorelab.sense.dataCollector.Process.ProcessData")+" \n";
-		query+=db.createTableFromClass("org.scorelab.sense.dataCollector.Process.ServiceData")+" \n";
-		query+=db.createTableFromClass("org.scorelab.sense.dataCollector.Sensor.SensorData")+" \n";
-		query+=db.createTableFromClass("org.scorelab.sense.dataCollector.Wifi.WifiData")+" \n";
-		SenseLog.i(query);*/
+		
 		
 		Collector Sensor=new Collector(this,Collector.DataType.SENSOR);
 		Collector App=new Collector(this,Collector.DataType.APP);

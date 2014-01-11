@@ -17,13 +17,13 @@ public class Collector {
 			DataReader dr=null;
 			
 			switch(dt){
-				case SENSOR: dr=new SensorDataReader(ctx);
+				case SENSOR: dr=new SensorDataReader();
 							 break;
 					
-				case APP: 	dr=new ApplicationDataReader(ctx);
+				case APP: 	dr=new ApplicationDataReader();
 							break;
 					
-				case WIFI:	dr=new WifiScanDataReader(ctx);
+				case WIFI:	dr=new WifiScanDataReader();
 							break;
 					
 				default: break;

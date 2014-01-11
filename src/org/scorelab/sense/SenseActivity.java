@@ -10,7 +10,11 @@ import android.os.Bundle;
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
-
+			
+			SenseScheduleReceiver s=new SenseScheduleReceiver();
+			//s.abortBroadcast();
+			s.clearAbortBroadcast();
+			s.onReceive(this, null);
 		}
 	
 	}

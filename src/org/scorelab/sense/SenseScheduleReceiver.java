@@ -12,6 +12,8 @@ public class SenseScheduleReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		
+		
 		AlarmManager service = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		Intent i = new Intent(context, Sense.class);
 		PendingIntent pending = PendingIntent.getService(context, 0, i,0);

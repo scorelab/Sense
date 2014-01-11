@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.scorelab.sense.Sense;
 import org.scorelab.sense.dataCollector.DataReader;
 import org.scorelab.sense.writer.DBWriter;
 
@@ -26,9 +27,9 @@ public class ApplicationDataReader extends DataReader {
 	
 	Context ctx;
 	
-	public ApplicationDataReader(Context context) {
-		ctx=context;
-		activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+	public ApplicationDataReader() {
+		ctx=Sense.context;
+		activityManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
 		MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
 		activityManager.getMemoryInfo(memoryInfo);
 		data=new AppData();
@@ -99,10 +100,10 @@ public class ApplicationDataReader extends DataReader {
 
 @Override
 public void run() {
-	DBWriter dbW=new DBWriter(ctx);
-	
-	dbW.insertProcess(getProcessData());
-	dbW.insertService(getServiceData());
+	DBWriter dbW=new DBWriter();
+	dbW.insertData(getProcessData());
+	dbW.insertData(getServiceData());
+	dbW.close();
 	
 	
 	

@@ -16,8 +16,9 @@ public class SensorData {
 	@Attributes(primaryKey = true)
 	public String timestamp;
 	public String collectTimestamp;
+	
 	SensorData(SensorEvent event){
-		
+		sensorValues="";
 		for(int m=0;m<event.values.length;m++){
 			sensorValues+=event.values[m]+",";
 			
@@ -33,4 +34,6 @@ public class SensorData {
 
 	}
 
+	
+	
 }

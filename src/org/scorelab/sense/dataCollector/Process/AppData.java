@@ -25,10 +25,10 @@ public class AppData {
 			process.add(new ProcessData(pId,pName , memInfo));
 			
 			
-			SenseLog.d("process Id "+pId+"  ,  process Name "+pName);
+			/*SenseLog.d("process Id "+pId+"  ,  process Name "+pName);
 	    	SenseLog.d(" pidMemoryInfo.getTotalPrivateDirty(): " + memInfo.getTotalPrivateDirty() + "\n");
 	    	SenseLog.d(" pidMemoryInfo.getTotalPss(): " + memInfo.getTotalPss() + "\n");
-	    	SenseLog.d(" pidMemoryInfo.getTotalSharedDirty(): " + memInfo.getTotalSharedDirty() + "\n");
+	    	SenseLog.d(" pidMemoryInfo.getTotalSharedDirty(): " + memInfo.getTotalSharedDirty() + "\n");*/
 	}
 	
 	public void addServiceData(RunningServiceInfo runningService){

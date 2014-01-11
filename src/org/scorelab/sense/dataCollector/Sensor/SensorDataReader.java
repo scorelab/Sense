@@ -7,6 +7,7 @@ import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 
+import org.scorelab.sense.Sense;
 import org.scorelab.sense.dataCollector.DataReader;
 import org.scorelab.sense.util.SenseLog;
 import org.scorelab.sense.writer.DBWriter;
@@ -30,8 +31,8 @@ public class SensorDataReader extends DataReader implements SensorEventListener 
 	
 	
 	
-	public SensorDataReader(Context ctx) {
-		this.ctx=ctx;
+	public SensorDataReader() {
+		ctx=Sense.context;
 		mSensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
 		mSensors= mSensorManager.getSensorList(Sensor.TYPE_ALL);
 		
@@ -116,9 +117,9 @@ public class SensorDataReader extends DataReader implements SensorEventListener 
 	public void run() {
 		SenseLog.d("running -sensor");
 		Vector<SensorData> v=getSensorData();
-		DBWriter dbW=new DBWriter(ctx);
-		SenseLog.d("db -sensor");
-		dbW.insertSensor(v);
+		DBWriter dbW=new DBWriter();
+		dbW.insertData(v);
+		dbW.close();
 		
 		
 	}

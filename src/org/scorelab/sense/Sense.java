@@ -5,8 +5,10 @@ import java.util.Calendar;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 
@@ -43,6 +45,13 @@ public class Sense extends Service {
 		
 		Collector Sensor=new Collector(this,Collector.DataType.SENSOR);
 		Collector App=new Collector(this,Collector.DataType.APP);
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		long senseTime = prefs.getLong("time", 0);
+		Toast.makeText(this, ""+senseTime, Toast.LENGTH_LONG).show();
+		
+		prefs.edit().putLong("time", Calendar.getInstance().getTimeInMillis()).commit();
+		//Collector Sms=new Collector(this,Collector.DataType.SMS);
 		//Collector Wifi=new Collector(this,Collector.DataType.WIFI);
 		
 		SenseLog.i("End Sense");

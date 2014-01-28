@@ -39,8 +39,8 @@ public class Sense extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		context=this;
-		SenseLog.i("Start Sense");
-		SenseLog.i("Time: "+ Calendar.getInstance().getTimeInMillis() + "");
+		//SenseLog.i("Start Sense");
+		//SenseLog.i("Time: "+ Calendar.getInstance().getTimeInMillis() + "");
 		
 		
 		Collector Sensor=new Collector(this,Collector.DataType.SENSOR);
@@ -56,9 +56,9 @@ public class Sense extends Service {
 		//prefs.edit().putLong("time", Calendar.getInstance().getTimeInMillis()).commit();
 		
 		
-		SenseLog.i("End Sense");
+		//SenseLog.i("End Sense");
 		
-		Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
 		
 		//service will not be stopped until we manually stop the service
 		return Service.START_NOT_STICKY;
@@ -77,7 +77,7 @@ public class Sense extends Service {
 		SenseLog.i("Sense wake up lock release");
 		
 		 super.onDestroy();
-	      Toast.makeText(this, "Service Stopped", Toast.LENGTH_LONG).show();
+	    //  Toast.makeText(this, "Service Stopped", Toast.LENGTH_LONG).show();
 
 	}
 }

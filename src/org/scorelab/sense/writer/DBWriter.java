@@ -75,10 +75,12 @@ public class DBWriter extends SQLiteOpenHelper{
 		database.execSQL(query);
 		query=createTableFromClass("org.scorelab.sense.dataCollector.Wifi.WifiData");
 		database.execSQL(query);
-		query=createTableFromClass("org.scorelab.sense.dataCollector.sms.SmsReceiverDataReader");
+		query=createTableFromClass("org.scorelab.sense.dataCollector.sms.SmsReceiverData");
 		database.execSQL(query);
-		
-		
+		query=createTableFromClass("org.scorelab.sense.dataCollector.battery.BatteryData");
+		database.execSQL(query);
+		query=createTableFromClass("org.scorelab.sense.dataCollector.Location.LocationData");
+		database.execSQL(query);
 		
 		
 		SenseLog.i("database createdn :)");

@@ -9,7 +9,10 @@ import org.scorelab.sense.util.SenseLog;
 import org.scorelab.sense.writer.DBWriter;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
@@ -19,10 +22,11 @@ public class WifiScanDataReader extends DataReader{
 	private WifiManager wifiManager;
 	private boolean wifiState=false;
 	private Vector<WifiData> wifiInfo=new Vector<WifiData>();
-	Context ctx;
+	Context context;
+	WifiReceiver receiverWifi;
 	public WifiScanDataReader() {
 		
-		Context context=Sense.context;
+		context=Sense.context;
 		ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
@@ -34,7 +38,10 @@ public class WifiScanDataReader extends DataReader{
 			
 			if(wifiState){
 				
+				receiverWifi = new WifiReceiver();
+				context.registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 				wifiManager.startScan();
+				
 				
 				
 			}else{
@@ -90,6 +97,24 @@ public void run() {
 	dbW.close();
 	
 	
+}
+
+class WifiReceiver extends BroadcastReceiver {
+    
+    // This method call when number of wifi connections changed
+	@Override
+    public void onReceive(Context c, Intent intent) {
+         
+       
+		DBWriter dbW=new DBWriter();
+		dbW.insertData(getWifiData());
+		dbW.close();
+        
+    }
+
+	
+	
+     
 }
 
 

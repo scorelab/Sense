@@ -13,6 +13,8 @@
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 	<uses-permission android:name="android.permission.READ_SMS" /> 
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />	
+	<uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -48,6 +50,12 @@
         <receiver android:name="org.scorelab.sense.dataCollector.sms.SmsDataReceiver" android:permission="android.permission.BROADCAST_SMS" android:exported="true">
     		<intent-filter android:priority="5822" >
         		<action android:name="android.provider.Telephony.SMS_RECEIVED" />
+   			 </intent-filter>
+ 		</receiver>
+ 		
+        <receiver android:name="org.scorelab.sense.dataCollector.battery.BatteryDataReceiver"  android:exported="true">
+    		<intent-filter  >
+        		<action android:name="android.intent.action.BATTERY_CHANGED" />
    			 </intent-filter>
  		</receiver>
         

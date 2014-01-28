@@ -46,13 +46,15 @@ public class Sense extends Service {
 		Collector Sensor=new Collector(this,Collector.DataType.SENSOR);
 		Collector App=new Collector(this,Collector.DataType.APP);
 		
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		long senseTime = prefs.getLong("time", 0);
-		Toast.makeText(this, ""+senseTime, Toast.LENGTH_LONG).show();
-		
-		prefs.edit().putLong("time", Calendar.getInstance().getTimeInMillis()).commit();
+		Collector Wifi=new Collector(this,Collector.DataType.WIFI);
+		Collector Location=new Collector(this,Collector.DataType.LOCATION);
 		//Collector Sms=new Collector(this,Collector.DataType.SMS);
-		//Collector Wifi=new Collector(this,Collector.DataType.WIFI);
+		//SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		//long senseTime = prefs.getLong("time", 0);
+		//Toast.makeText(this, ""+senseTime, Toast.LENGTH_LONG).show();
+		
+		//prefs.edit().putLong("time", Calendar.getInstance().getTimeInMillis()).commit();
+		
 		
 		SenseLog.i("End Sense");
 		

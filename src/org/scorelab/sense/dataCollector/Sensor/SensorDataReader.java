@@ -81,7 +81,7 @@ public class SensorDataReader extends DataReader implements SensorEventListener 
 	
 	public Vector<SensorData> getSensorData(){
 		try {
-			TimeUnit.MILLISECONDS.sleep(2000);
+			TimeUnit.MILLISECONDS.sleep(10000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

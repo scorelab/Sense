@@ -1,6 +1,7 @@
 package org.scorelab.sense.dataHandler;
 
 import org.scorelab.sense.dataCollector.DataReader;
+import org.scorelab.sense.dataCollector.Location.LocationDataReader;
 import org.scorelab.sense.dataCollector.Process.ApplicationDataReader;
 import org.scorelab.sense.dataCollector.Sensor.SensorDataReader;
 import org.scorelab.sense.dataCollector.Wifi.WifiScanDataReader;
@@ -10,7 +11,7 @@ import android.content.Context;
 
 public class Collector {
 	public enum DataType {
-	    SENSOR , APP , WIFI ,SMS
+	    SENSOR , APP , WIFI ,LOCATION
 	};
 	
 	public Collector(Context ctx,DataType dt) {
@@ -27,7 +28,7 @@ public class Collector {
 				case WIFI:	dr=new WifiScanDataReader();
 							break;
 							
-				case SMS:	dr=new SmsReceiverDataReader();
+				case LOCATION:	dr=new LocationDataReader();
 				break;			
 					
 				default: break;
